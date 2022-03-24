@@ -11,9 +11,9 @@ public class ResponseToByte {
     public static byte[] responseToByte(Response response) {
         StringBuilder responseString = new StringBuilder();
         //起始行
-        responseString.append("HTTP/1.0").append(" ")
+        responseString.append("HTTP/1.1").append(" ")
                 .append(response.getStatusCode()).append(" ")
-                .append(response.getReasonPhrase()).append(CRLF).append(CRLF);
+                .append(response.getReasonPhrase()).append(CRLF);
         //首部字段
         Set<Map.Entry<String, String>> heads = response.getHeads().entrySet();
         for (Map.Entry<String, String> head : heads) {

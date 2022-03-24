@@ -1,17 +1,23 @@
 package org.yh.endpoint;
 
-import org.yh.handle.ClientHandle;
+import org.yh.handle.BIOClientHandle;
 import lombok.extern.log4j.Log4j;
 
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 @Log4j
 public class BIOEndpoint {
-
+    ThreadPoolExecutor threadPoolExecutor;
     public BIOEndpoint(int port) {
-        //TODO: 线程池管理
+         this.threadPoolExecutor =
+                new ThreadPoolExecutor(5, 10, 200, TimeUnit.MILLISECONDS,
+                                        new ArrayBlockingQueue<Runnable>(5));
+
         startListing(port);
 
     }
@@ -35,12 +41,13 @@ public class BIOEndpoint {
                 e.printStackTrace();
             }
 
-            addNewClient(client);
+            if (client != null) {
+                addNewClient(client);
+            }
         }
     }
     public void addNewClient(Socket client){
-        Thread t = new ClientHandle(client);
-        t.start();
+        threadPoolExecutor.execute(new BIOClientHandle(client));
         log.info("对客户端 " + client.getInetAddress().getHostAddress() + ":" + client.getPort() + "处理中...");
     }
 }

@@ -10,6 +10,8 @@ import lombok.extern.log4j.Log4j;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.net.Socket;
 
 @Log4j
@@ -33,8 +35,9 @@ public class Dispatcher {
         }
         try {
 
-            servlet = (HttpServlet) Class.forName(servletClass).newInstance();
-        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+            servlet = (HttpServlet) Class.forName(servletClass).getDeclaredConstructor().newInstance();
+
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
         if (servlet != null) {
@@ -45,19 +48,7 @@ public class Dispatcher {
             }
             log.info("请求servlet处理完毕");
         }
-        flushResponse();
     }
 
-    private void flushResponse(){
-        try {
 
-            OutputStream outputStream = client.getOutputStream();
-            outputStream.write(ResponseToByte.responseToByte(response));
-            outputStream.close();
-            client.close();
-            log.info("请求完成，连接已关闭");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 }

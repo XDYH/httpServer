@@ -11,6 +11,7 @@ public class Request {
     @Getter private Method method;
     @Getter private String url;
     private Map<String, String> heads = new HashMap<>();
+    @Getter Map<String, String> parameters = new HashMap<>();
     @Getter private String body;
     public Request(byte[] data){
         String[] lines;
@@ -25,10 +26,23 @@ public class Request {
             method = Method.POST;
         }
 
-        url = splitFirstLine[1];//获取请求url
+        String urlWithParameters = splitFirstLine[1];//获取请求url（其中还包含get的参数）
+        url = urlWithParameters.split("\\?")[0];//前半部分就是url
+        if (urlWithParameters.split("\\?").length > 1){
+            String[] stringParameter = urlWithParameters.split("\\?")[1].split("&");
+//        解析url中所带参数
+            for (String s : stringParameter) {
+                String[] kv = s.split("=");
+                if (kv.length == 2){
+                    parameters.put(kv[0], kv[1]);
+                }
+
+            }
+        }
 
 
-        for (int i = 2; i < lines.length; i++) {
+
+        for (int i = 1; i < lines.length; i++) {
             if (lines[i].equals("")) {
                 break;
             }
@@ -41,5 +55,9 @@ public class Request {
     }
     public String getHead(String name) {
         return heads.get(name);
+    }
+
+    public String getParameters(String name) {
+        return parameters.get(name);
     }
 }
