@@ -12,7 +12,7 @@ import java.util.concurrent.TimeUnit;
 
 @Log4j
 public class BIOEndpoint {
-    ThreadPoolExecutor threadPoolExecutor;
+    private final ThreadPoolExecutor threadPoolExecutor;
     public BIOEndpoint(int port) {
          this.threadPoolExecutor =
                 new ThreadPoolExecutor(5, 10, 200, TimeUnit.MILLISECONDS,

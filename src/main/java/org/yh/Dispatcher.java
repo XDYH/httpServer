@@ -19,7 +19,7 @@ import java.net.Socket;
 public class Dispatcher {
     private Request request;
     private Response response;
-    private Socket client;
+
 
     public void doDispatch() {
 

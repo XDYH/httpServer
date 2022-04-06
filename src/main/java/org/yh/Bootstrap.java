@@ -1,6 +1,7 @@
 package org.yh;
 
 import org.yh.endpoint.BIOEndpoint;
+import org.yh.endpoint.NIOEndpoint;
 import org.yh.util.PropertyUtil;
 import lombok.extern.log4j.Log4j;
 
@@ -10,7 +11,8 @@ public class Bootstrap {
         String port = PropertyUtil.getProperty("server.port");
 
 
-        BIOEndpoint bioEndpoint = new BIOEndpoint(Integer.parseInt(port));
+//        BIOEndpoint bioEndpoint = new BIOEndpoint(Integer.parseInt(port));
+        NIOEndpoint nioEndpoint = new NIOEndpoint(Integer.parseInt(port));
 
     }
 

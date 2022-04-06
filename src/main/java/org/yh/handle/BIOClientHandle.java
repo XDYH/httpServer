@@ -51,7 +51,7 @@ public class BIOClientHandle extends Thread{
         log.debug("请求内容:\n" + new String(buff));
         Request request = new Request(buff);//处理请求
         log.info(client.getPort());
-        Dispatcher dispatcher = new Dispatcher(request, response, client);
+        Dispatcher dispatcher = new Dispatcher(request, response);
         dispatcher.doDispatch();
         flushResponse();
     }
